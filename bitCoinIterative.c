@@ -1,3 +1,4 @@
+/*
 #Copyright (c) 2011, Joseph Matheney
 #All rights reserved.
  
@@ -7,7 +8,7 @@
 #    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
  
 #THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+ */
 #ifdef fail
         #!/bin/bash
         # NOTE you can chmod 0755 this file and then execute it to compile (or just copy and paste)
@@ -99,12 +100,12 @@ int main() {
  
  
         // we are going to supply the block header with the values from the generation block 0
-        header.version =        1;
-        hex2bin(header.prev_block,              "0000000000000000000000000000000000000000000000000000000000000000");
-        hex2bin(header.merkle_root,             "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
-        header.timestamp =      1231006505;
-        header.bits =           486604799;
-        header.nonce =          2083236893;
+        header.version =        2;
+        hex2bin(header.prev_block,              "000000000000000117c80378b8da0e33559b5997f2ad55e2f7d18ec1975b9717");
+        hex2bin(header.merkle_root,             "871714dcbae6c8193a2bb9b2a69fe1c0440399f38d94b3a0f1b447275a29978a");
+        header.timestamp =      1392872245;
+        header.bits =           419520339;
+        header.nonce =          0;
        
         // the endianess of the checksums needs to be little, this swaps them form the big endian format you normally see in block explorer
         byte_swap(header.prev_block, 32);
