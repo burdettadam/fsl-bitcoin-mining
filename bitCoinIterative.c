@@ -149,7 +149,7 @@ int main() {
         }
         header.nonce ++;
     }
-       
+       printf("number of hashs per second = %f\n",header.nonce / 60.0 );
 
  
         return 0;
