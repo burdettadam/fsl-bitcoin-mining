@@ -124,10 +124,12 @@ int main() {
     double start = When();
     double timer = start;
     unsigned int counter =0;
-    #pragma omp parallel private(&header){
+    #pragma omp parallel private(&header)
+    {
         while ( timer < 60.0){
 
-            #pragma omp critical {
+            #pragma omp critical 
+            {
                 header.nonce = counter;
                 counter ++; 
                 if ( counter % 800000 == 0){
