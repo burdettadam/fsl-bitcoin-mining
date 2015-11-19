@@ -32,7 +32,12 @@ typedef struct block_header {
         unsigned int    nonce;
 } block_header;
  
- 
+double When()
+{
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    return ((double) tp.tv_sec + (double) tp.tv_usec * 1e-6);
+}
 // we need a helper function to convert hex to binary, this function is unsafe and slow, but very readable (write something better)
 void hex2bin(unsigned char* dest, unsigned char* src)
 {
@@ -108,37 +113,44 @@ int main() {
         header.nonce =          0;
        
         // the endianess of the checksums needs to be little, this swaps them form the big endian format you normally see in block explorer
-        byte_swap(header.prev_block, 32);
-        byte_swap(header.merkle_root, 32);
+        byte_swap(header.prev_block, 32); // we need this to set up the header
+        byte_swap(header.merkle_root, 32); // we need this to set up the header
        
         // dump out some debug data to the terminal
         printf("sizeof(block_header) = %d\n", sizeof(block_header));
         printf("Block header (in human readable hexadecimal representation): ");
         hexdump((unsigned char*)&header, sizeof(block_header));
- 
-        // Use SSL's sha256 functions, it needs to be initialized
-    SHA256_Init(&sha256_pass1);
-    // then you 'can' feed data to it in chuncks, but here were just making one pass cause the data is so small
-    SHA256_Update(&sha256_pass1, (unsigned char*)&header, sizeof(block_header));
-    // this ends the sha256 session and writes the checksum to hash1
-    SHA256_Final(hash1, &sha256_pass1);
+        double start = When();
+    while ( (When() - start) < 60.0){
+            // Use SSL's sha256 functions, it needs to be initialized
+        SHA256_Init(&sha256_pass1);
+        // then you 'can' feed data to it in chuncks, but here were just making one pass cause the data is so small
+        SHA256_Update(&sha256_pass1, (unsigned char*)&header, sizeof(block_header));
+        // this ends the sha256 session and writes the checksum to hash1
+        SHA256_Final(hash1, &sha256_pass1);
+           
+            // to display this, we want to swap the byte order to big endian
+     //       byte_swap(hash1, SHA256_DIGEST_LENGTH); // this is for printing 
+     //       printf("Useless First Pass Checksum: ");
+     //       hexdump(hash1, SHA256_DIGEST_LENGTH);
+     
+            // but to calculate the checksum again, we need it in little endian, so swap it back
+     //       byte_swap(hash1, SHA256_DIGEST_LENGTH);
+           
+        //same as above
+        SHA256_Init(&sha256_pass2);
+        SHA256_Update(&sha256_pass2, hash1, SHA256_DIGEST_LENGTH);
+        SHA256_Final(hash2, &sha256_pass2);
+        if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
+            byte_swap(hash2, SHA256_DIGEST_LENGTH);
+            printf("Target Second Pass Checksum: ");
+            hexdump(hash2, SHA256_DIGEST_LENGTH);
+
+        }
+        header.nonce ++;
+    }
        
-        // to display this, we want to swap the byte order to big endian
-        byte_swap(hash1, SHA256_DIGEST_LENGTH);
-        printf("Useless First Pass Checksum: ");
-        hexdump(hash1, SHA256_DIGEST_LENGTH);
- 
-        // but to calculate the checksum again, we need it in little endian, so swap it back
-        byte_swap(hash1, SHA256_DIGEST_LENGTH);
-       
-    //same as above
-    SHA256_Init(&sha256_pass2);
-    SHA256_Update(&sha256_pass2, hash1, SHA256_DIGEST_LENGTH);
-    SHA256_Final(hash2, &sha256_pass2);
-       
-        byte_swap(hash2, SHA256_DIGEST_LENGTH);
-        printf("Target Second Pass Checksum: ");
-        hexdump(hash2, SHA256_DIGEST_LENGTH);
+
  
         return 0;
 }
