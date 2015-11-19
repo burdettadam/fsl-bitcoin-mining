@@ -124,7 +124,7 @@ int main() {
     double start = When();
     double timer = start;
     unsigned int counter =0;
-    #pragma omp parallel private(&header)
+    #pragma omp parallel private(header)
     {
         while ( timer < 60.0){
 
