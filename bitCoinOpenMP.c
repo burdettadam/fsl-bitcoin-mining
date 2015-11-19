@@ -122,7 +122,7 @@ int main() {
     printf("Block header (in human readable hexadecimal representation): ");
     hexdump((unsigned char*)&header, sizeof(block_header));
     double start = When();
-    double timer = start;
+    double timer = When() - start;
     unsigned int counter =0;
     #pragma omp parallel private(header)
     {
