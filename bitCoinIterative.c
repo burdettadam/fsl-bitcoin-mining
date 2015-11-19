@@ -122,15 +122,19 @@ int main() {
         printf("Block header (in human readable hexadecimal representation): ");
         hexdump((unsigned char*)&header, sizeof(block_header));
         double start = When();
+        double timer = start;
         unsigned int counter =0;
         #pragma omp parallel private(&header){
-    while ( (When() - start) < 60.0){
+    while ( timer < 60.0){
 
         #pragma omp critical {
             header.nonce = counter;
             counter ++; 
+            if ( counter % 800000 == 0){
+                timer = (When() - start);
+            }
         }
-            // Use SSL's sha256 functions, it needs to be initialized
+        // Use SSL's sha256 functions, it needs to be initialized
         SHA256_Init(&sha256_pass1);
         // then you 'can' feed data to it in chuncks, but here were just making one pass cause the data is so small
         SHA256_Update(&sha256_pass1, (unsigned char*)&header, sizeof(block_header));
