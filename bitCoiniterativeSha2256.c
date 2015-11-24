@@ -99,28 +99,6 @@ void hexdump(unsigned char* data, int len)
         }
         printf("\n");
 }
- 
-// this function swaps the byte ordering of binary data, this code is slow and bloated (write your own)
-void byte_swap(unsigned char* data, int len) {
-        int c;
-        unsigned char tmp[len];
-       swap256(,data);
-
-
-        c=0;
-        while(c<len)
-        {
-                tmp[c] = data[len-(c+1)];
-                c++;
-        }
-       
-        c=0;
-        while(c<len)
-        {
-                data[c] = tmp[c];
-                c++;
-        }
-}
 static inline void swap256(void *dest_p, const void *src_p){
         uint32_t *dest = dest_p;
         const uint32_t *src = src_p;
