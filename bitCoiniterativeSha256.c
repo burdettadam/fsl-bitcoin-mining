@@ -92,7 +92,19 @@ void byte_swap(unsigned char* data, int len) {
                 c++;
         }
 }
- 
+static inline void swap256(void *dest_p, const void *src_p) {
+        uint32_t *dest = dest_p;
+        const uint32_t *src = src_p;
+
+        dest[0] = src[7];
+        dest[1] = src[6];
+        dest[2] = src[5];
+        dest[3] = src[4];
+        dest[4] = src[3];
+        dest[5] = src[2];
+        dest[6] = src[1];
+        dest[7] = src[0];
+    }
 int main() {
     // start with a block header struct
     block_header header;
@@ -133,19 +145,19 @@ int main() {
             sha256_final(hash1, &sha256_pass1);
                
                 // to display this, we want to swap the byte order to big endian
-         //       byte_swap(hash1, SHA256_DIGEST_LENGTH); // this is for printing 
+         //       swap256(hash1, SHA256_DIGEST_LENGTH); // this is for printing 
          //       printf("Useless First Pass Checksum: ");
          //       hexdump(hash1, SHA256_DIGEST_LENGTH);
          
                 // but to calculate the checksum again, we need it in little endian, so swap it back
-         //       byte_swap(hash1, SHA256_DIGEST_LENGTH);
+         //       swap256(hash1, SHA256_DIGEST_LENGTH);
                
             //same as above
             sha256_init(&sha256_pass2);
             sha256_update(&sha256_pass2, hash1, SHA256_DIGEST_SIZE);
             sha256_final(hash2, &sha256_pass2);
             if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
-                byte_swap(hash2, SHA256_DIGEST_SIZE);
+                swap256(hash2, SHA256_DIGEST_SIZE);
                 printf("Target Second Pass Checksum: ");
                 hexdump(hash2, SHA256_DIGEST_SIZE);
 
