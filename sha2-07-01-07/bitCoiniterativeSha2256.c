@@ -181,7 +181,7 @@ int main() {
                 timer = (When() - start);
             }
         }
-       printf("number of hashs per second = %f\n",header.nonce / When()- start);
+       printf("number of hashs per second = %f\n",header.nonce / (When()- start));
 
  
         return 0;
