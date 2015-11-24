@@ -33,6 +33,33 @@ typedef struct block_header {
         unsigned int    nonce;
 } block_header;
  
+ unsigned char* headerChanger(block_header header){
+    unsigned char ch[2];
+    memcpy(ch, (char*)&header.version, sizeof(int));
+    unsigned char results[70];
+    results[0] = ch[0];
+    results[1] = ch[1];
+    int i;
+    for( i = 0 ; i < 32; i++){
+        results[i+2] = header.prev_block[i];
+    }
+    for( i = 0 ; i < 32; i++){
+        results[i+34] = header.merkle_root[i];
+    }
+    memcpy(ch, (char*)&header.timestamp, sizeof(int));
+    results[64] =  ch[0];
+    results[65] =  ch[1];
+
+    memcpy(ch, (char*)&header.bits, sizeof(int));
+    results[66] =  ch[0];
+    results[67] =  ch[1];
+
+    memcpy(ch, (char*)&header.nonce, sizeof(int));
+    results[68] =  ch[0];
+    results[69] =  ch[1];
+    return results;
+ }
+
 double When()
 {
     struct timeval tp;
@@ -77,7 +104,9 @@ void hexdump(unsigned char* data, int len)
 void byte_swap(unsigned char* data, int len) {
         int c;
         unsigned char tmp[len];
-       
+       swap256(,data);
+
+
         c=0;
         while(c<len)
         {
@@ -92,7 +121,7 @@ void byte_swap(unsigned char* data, int len) {
                 c++;
         }
 }
-static inline void swap256(void *dest_p, const void *src_p) {
+static inline void swap256(void *dest_p, const void *src_p){
         uint32_t *dest = dest_p;
         const uint32_t *src = src_p;
 
@@ -145,19 +174,19 @@ int main() {
             sha256_final(hash1, &sha256_pass1);
                
                 // to display this, we want to swap the byte order to big endian
-         //       swap256(hash1, SHA256_DIGEST_LENGTH); // this is for printing 
+         //       byte_swap(hash1, SHA256_DIGEST_LENGTH); // this is for printing 
          //       printf("Useless First Pass Checksum: ");
          //       hexdump(hash1, SHA256_DIGEST_LENGTH);
          
                 // but to calculate the checksum again, we need it in little endian, so swap it back
-         //       swap256(hash1, SHA256_DIGEST_LENGTH);
+         //       byte_swap(hash1, SHA256_DIGEST_LENGTH);
                
             //same as above
             sha256_init(&sha256_pass2);
             sha256_update(&sha256_pass2, hash1, SHA256_DIGEST_SIZE);
             sha256_final(hash2, &sha256_pass2);
             if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
-                swap256(hash2, SHA256_DIGEST_SIZE);
+                byte_swap(hash2, SHA256_DIGEST_SIZE);
                 printf("Target Second Pass Checksum: ");
                 hexdump(hash2, SHA256_DIGEST_SIZE);
 
