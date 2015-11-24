@@ -13,6 +13,8 @@ http://pastebin.com/EXDsRbYH
 
 https://github.com/ckolivas/cgminer/blob/master/sha2.c#L93
 
+http://www.gladman.me.uk
+
 can be compiled with the following command
 
 gcc -o bitcoin bitcoinIterative.c -O3 -lssl -lcrypto
