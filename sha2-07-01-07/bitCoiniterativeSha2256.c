@@ -17,7 +17,7 @@
 #endif
  
 //#include <openssl/sha.h>
-#include "sha22.h"
+#include "sha2.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -99,19 +99,24 @@ void hexdump(unsigned char* data, int len)
         }
         printf("\n");
 }
-static inline void swap256(void *dest_p, const void *src_p){
-        uint32_t *dest = dest_p;
-        const uint32_t *src = src_p;
-
-        dest[0] = src[7];
-        dest[1] = src[6];
-        dest[2] = src[5];
-        dest[3] = src[4];
-        dest[4] = src[3];
-        dest[5] = src[2];
-        dest[6] = src[1];
-        dest[7] = src[0];
-    }
+void byte_swap(unsigned char* data, int len) {
+        int c;
+        unsigned char tmp[len];
+       
+        c=0;
+        while(c<len)
+        {
+                tmp[c] = data[len-(c+1)];
+                c++;
+        }
+       
+        c=0;
+        while(c<len)
+        {
+                data[c] = tmp[c];
+                c++;
+        }
+}
 int main() {
     // start with a block header struct
     block_header header;
@@ -165,9 +170,9 @@ int main() {
             sha256_hash(hash1, SHA256_DIGEST_SIZE, sha256_pass2);
             sha256_end(hash2, sha256_pass2);
             if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
-                swap256(readable,hash2);
+                byte_swap(hash2,SHA256_DIGEST_SIZE);
                 printf("Target Second Pass Checksum: ");
-                hexdump(readable, SHA256_DIGEST_SIZE);
+                hexdump(hash2, SHA256_DIGEST_SIZE);
 
             }
 
@@ -176,7 +181,7 @@ int main() {
                 timer = (When() - start);
             }
         }
-       printf("number of hashs per second = %f\n",header.nonce / 60.0 );
+       printf("number of hashs per second = %f\n",header.nonce / When()- start);
 
  
         return 0;
