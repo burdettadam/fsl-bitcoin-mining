@@ -12,13 +12,18 @@ int main(int argc, char** argv) {
     // Get the rank of the process
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    // Get number of hashes to run
-    
-    if (rank == 0){
+    // caculate number of hashes(range) to run
 
+    if (rank == 0){
+    //while // 60 secs
+        //recive all rank 
+        //sends start nance and range to 
     }
     else {
-
+        //do first range based off of caclulation
+        //while
+            //send rank to root
+            //recive nance and range from root.
     }
 
     // Finalize the MPI environment.
