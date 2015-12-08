@@ -128,7 +128,7 @@ void master(int ntasks,int  range )
 	for (rank = 1; rank < ntasks; ++rank) {
 		MPI_Send(0, 0, MPI_INT, rank, DIETAG, MPI_COMM_WORLD);
 	}
-    printf("number of hashs per second = %.1f\n",nonce / (When() - start) );
+    printf("number of hashs per second = %d\n",(int)(nonce / (When() - start)) );
 
 	return;
 }
