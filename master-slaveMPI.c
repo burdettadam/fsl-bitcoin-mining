@@ -23,6 +23,58 @@ double When()
     gettimeofday(&tp, NULL);
     return ((double) tp.tv_sec + (double) tp.tv_usec * 1e-6);
 }
+void hex2bin(unsigned char* dest, unsigned char* src)
+{
+        unsigned char bin;
+        int c, pos;
+        char buf[3];
+ 
+        pos=0;
+        c=0;
+        buf[2] = 0;
+        while(c < strlen(src))
+        {
+                // read in 2 characaters at a time
+                buf[0] = src[c++];
+                buf[1] = src[c++];
+                // convert them to a interger and recast to a char (uint8)
+                dest[pos++] = (unsigned char)strtol(buf, NULL, 16);
+        }
+       
+}
+ 
+// this function is mostly useless in a real implementation, were only using it for demonstration purposes
+void hexdump(unsigned char* data, int len)
+{
+        int c;
+       
+        c=0;
+        while(c < len)
+        {
+                printf("%.2x", data[c++]);
+        }
+        printf("\n");
+}
+ 
+// this function swaps the byte ordering of binary data, this code is slow and bloated (write your own)
+void byte_swap(unsigned char* data, int len) {
+        int c;
+        unsigned char tmp[len];
+       
+        c=0;
+        while(c<len)
+        {
+                tmp[c] = data[len-(c+1)];
+                c++;
+        }
+       
+        c=0;
+        while(c<len)
+        {
+                data[c] = tmp[c];
+                c++;
+        }
+}
 void master(int ntasks,int  range )
 {
 	int	 rank, nonce = 0 ;
