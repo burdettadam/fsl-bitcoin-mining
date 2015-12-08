@@ -12,7 +12,7 @@
 #include <sys/time.h>
 #include "sha256.cu"
  
-#define SHA256_DIGEST_SIZE 32
+#define SHA256_DIGEST_SIZE 64
 #define NUM_BLOCKS 1024
 
 // this is the block header, it is 80 bytes long (steal this code)
@@ -92,6 +92,10 @@ __global__ void doCalc(unsigned char *dev_merkle_root, unsigned char *dev_prev_b
         header.prev_block[i] = dev_prev_block[i];
         header.merkle_root[i] = dev_merkle_root[i];
     }
+
+    byte_swap(header.prev_block);
+    byte_swap(header.merkle_root);
+
 
     // we need a place to store the checksums
     unsigned char hash1[32];
