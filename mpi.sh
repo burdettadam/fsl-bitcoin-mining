@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --time=00:10:00   # walltime
-#SBATCH --nodes=32   # number of nodes
+#SBATCH --nodes=128   # number of nodes
 #SBATCH --mem-per-cpu=2024M   # memory per CPU core
 #SBATCH -J "sha256 hashtest"   # job name
 #SBATCH --mail-user=burdettadam@gmail.com   # email address
