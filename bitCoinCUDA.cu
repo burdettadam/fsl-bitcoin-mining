@@ -94,8 +94,8 @@ __global__ void doCalc(unsigned char *dev_merkle_root, unsigned char *dev_prev_b
     }
 
     // we need a place to store the checksums
-    unsigned char hash1[SHA256_DIGEST_SIZE];
-    unsigned char hash2[SHA256_DIGEST_SIZE];
+    unsigned char hash1[32];
+    unsigned char hash2[32];
    
     // you should be able to reuse these, but openssl sha256 is slow, so your probbally not going to implement this anyway
     SHA256_CTX sha256_pass1, sha256_pass2;
@@ -103,6 +103,9 @@ __global__ void doCalc(unsigned char *dev_merkle_root, unsigned char *dev_prev_b
     header.nonce = (seed *  blockDim.x * NUM_BLOCKS) + blockIdx.x * blockDim.x + threadIdx.x;
     //if(threadIdx.x == 0) printf("nonce: %d\n", header.nonce);
     // Use SSL's sha256 functions, it needs to be initialized
+
+
+
     sha256_init(&sha256_pass1);
     // then you 'can' feed data to it in chuncks, but here were just making one pass cause the data is so small
     sha256_update(&sha256_pass1, (unsigned char*)&header, sizeof(block_header));
