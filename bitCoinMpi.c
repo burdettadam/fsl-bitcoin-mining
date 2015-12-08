@@ -191,12 +191,12 @@ void slave(int range)
 	        SHA256_Init(&sha256_pass2);
 	        SHA256_Update(&sha256_pass2, hash1, SHA256_DIGEST_LENGTH);
 	        SHA256_Final(hash2, &sha256_pass2);
-	        if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
-	            byte_swap(hash2, SHA256_DIGEST_LENGTH);
-	            printf("Target Second Pass Checksum: ");
-	            hexdump(hash2, SHA256_DIGEST_LENGTH);
+	    //    if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
+	    //        byte_swap(hash2, SHA256_DIGEST_LENGTH);
+	    //        printf("Target Second Pass Checksum: ");
+	    //        hexdump(hash2, SHA256_DIGEST_LENGTH);
 
-	        }
+	    //    }
             header.nonce ++;
     	}
 		result = 1 /* do the nonce */;
