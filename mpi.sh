@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --time=00:03:00   # walltime
-#SBATCH --nodes=342   # number of nodes
+#SBATCH --time=00:10:00   # walltime
+#SBATCH --nodes=128   # number of nodes
 #SBATCH --mem-per-cpu=2024M   # memory per CPU core
 #SBATCH -J "sha256 hashtest"   # job name
 #SBATCH --mail-user=burdettadam@gmail.com   # email address
@@ -18,5 +18,17 @@ export PBS_QUEUE=batch
 
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
 mpicc -o bitcoin bitCoinMpi.c -O3 -lssl -lcrypto
-echo "bitcoin 342"
-mpirun -np 342 bitcoin
+echo "bitcoin 2"
+mpirun -np 2 bitcoin
+echo "bitcoin 4"
+mpirun -np 4 bitcoin
+echo "bitcoin 8"
+mpirun -np 8 bitcoin
+echo "bitcoin 16"
+mpirun -np 16 bitcoin
+echo "bitcoin 32"
+mpirun -np 32 bitcoin
+echo "bitcoin 64 "
+mpirun -np 64 bitcoin
+echo "bitcoin 128"
+mpirun -np 128 bitcoin
