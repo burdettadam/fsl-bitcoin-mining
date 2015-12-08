@@ -100,7 +100,7 @@ void master(int ntasks,int  range )
  	//nonce += range; /* get_next_nonce_request */ // I dont think we need this
 	double start = When();
 	double timer = When() - start;
-	while (timer < .1/* valid new nonce request */) {
+	while (timer < 60/* valid new nonce request */) {
 		MPI_Recv(&result,       /* message buffer */
 		1,              /* one data item */
 		MPI_DOUBLE,     /* of type double real */
@@ -128,6 +128,8 @@ void master(int ntasks,int  range )
 	for (rank = 1; rank < ntasks; ++rank) {
 		MPI_Send(0, 0, MPI_INT, rank, DIETAG, MPI_COMM_WORLD);
 	}
+    printf("number of hashs per second = %f\n",nonce / When() - start );
+
 	return;
 }
 
@@ -197,7 +199,6 @@ void slave(int range)
 	        }
             header.nonce ++;
     	}
-
 		result = 1 /* do the nonce */;
 		MPI_Send(&result, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 	}
