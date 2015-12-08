@@ -150,11 +150,8 @@ void slave(int range)
 		MPI_Send(&result, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 	}
 }
-int main(argc, argv)
+int main(int argc, char *argv[])
 {
-	int argc;
-	char *argv[];
-
 	int myrank;
 	MPI_Init(&argc, &argv);   /* initialize MPI */
 	MPI_Comm_rank(MPI_COMM_WORLD , &myrank);      /* process rank, 0 thru N-1 */
