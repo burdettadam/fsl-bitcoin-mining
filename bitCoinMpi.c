@@ -122,6 +122,7 @@ void master(int ntasks,int  range )
 		MPI_Recv(&result, 1, MPI_DOUBLE, MPI_ANY_SOURCE,
 		MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 	}
+	// this is where I should incrment the nonce for more acuracy.
 /*
 * Tell all the slaves to exit.
 */
