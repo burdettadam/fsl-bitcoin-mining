@@ -61,9 +61,8 @@ static char sccsid[] = "@(#)strlen.c	8.1 (Berkeley) 6/4/93";
 #include <sys/cdefs.h>
 #include <string.h>
 
-size_t
-strlen(str)
-	const char *str;
+__device__ size_t
+strlen2(const char *str)
 {
 	register const char *s;
 

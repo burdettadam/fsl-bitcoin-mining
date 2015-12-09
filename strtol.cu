@@ -72,26 +72,26 @@
  */
 
 
-static inline int
+__device__ static inline int
 isupper(char c)
 {
     return (c >= 'A' && c <= 'Z');
 }
 
-static inline int
+__device__ static inline int
 isalpha(char c)
 {
     return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
 
-static inline int
+__device__ static inline int
 isspace(char c)
 {
     return (c == ' ' || c == '\t' || c == '\n' || c == '\12');
 }
 
-static inline int
+__device__ static inline int
 isdigit(char c)
 {
     return (c >= '0' && c <= '9');
@@ -103,11 +103,7 @@ isdigit(char c)
  * Ignores `locale' stuff.  Assumes that the upper and lower case
  * alphabets and digits are each contiguous.
  */
-long
-strtol(nptr, endptr, base)
-	const char *nptr;
-	char **endptr;
-	register int base;
+__device__ long strtol2(const char *nptr, char **endptr, register int base)
 {
 	register const char *s = nptr;
 	register unsigned long acc;
@@ -195,11 +191,8 @@ strtol(nptr, endptr, base)
  * Ignores `locale' stuff.  Assumes that the upper and lower case
  * alphabets and digits are each contiguous.
  */
-unsigned long
-strtoul(nptr, endptr, base)
-	const char *nptr;
-	char **endptr;
-	register int base;
+__device__ unsigned long
+strtoul2(const char *nptr, char **endptr, register int base)
 {
 	register const char *s = nptr;
 	register unsigned long acc;
