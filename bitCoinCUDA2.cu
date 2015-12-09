@@ -142,8 +142,8 @@ int main() {
         timer = When() - start;
         //printf("%d iterations\n",counter);
         cudaDeviceSynchronize();
-        cudaMemcpy(&results , d_counter, sizeof(counter), cudaMemcpyDeviceToHost);
-        printf("counter: %d \n",counter); 
+  //      cudaMemcpy(&results , d_counter, sizeof(counter), cudaMemcpyDeviceToHost);
+  //      printf("counter: %d \n",counter); 
     }
 
     printf("number of hashs per second = %f\n",hashes / (When() - start) );
