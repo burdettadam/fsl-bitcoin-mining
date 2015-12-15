@@ -13,6 +13,7 @@
 #include "sha256.cu"
  
 #define SHA256_DIGEST_SIZE 32
+#define repeats  1000
 #define NUM_BLOCKS 1024
 
 // this is the block header, it is 80 bytes long (steal this code)
@@ -83,7 +84,6 @@ __device__ __host__ void byte_swap(unsigned char* data) {
 }
 
 __global__ void doCalc(unsigned char *dev_prev_block, unsigned char *dev_merkle_root, int seed) {
-    int repeats = 1;
     int i;   
     block_header header;
     header.version =        2;
@@ -128,21 +128,21 @@ __global__ void doCalc(unsigned char *dev_prev_block, unsigned char *dev_merkle_
         sha256_init(&sha256_pass2);
         sha256_update(&sha256_pass2, hash1, SHA256_DIGEST_SIZE);
         sha256_final(&sha256_pass2, hash2);
-        // if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
-        //     //hexdump((unsigned char*)&header, sizeof(block_header));
-        //     printf("%u:\n", header.nonce);
-        //     byte_swap(hash2);
-        //     printf("Target Second Pass Checksum: \n");
-        //     print_hash(hash2);
-        // }
+         if ( header.nonce == 0 || header.nonce == 3 || header.nonce == 856192328 ) {
+             //hexdump((unsigned char*)&header, sizeof(block_header));
+             printf("%u:\n", header.nonce);
+             byte_swap(hash2);
+             printf("Target Second Pass Checksum: \n");
+             print_hash(hash2);
+         }
         header.nonce++;
     }
 }
 
 int main() {
     int i = 0;
-    int blocksize = 1024;
-    int threads = 1024;
+    int blocksize = 16;
+    int threads = 128;
 
     long long hashes = 0;
 
@@ -175,7 +175,7 @@ int main() {
     while ( timer < 60.0){
         //printf("before kernel call\n");
         doCalc<<< blocksize, threads >>>(dev_prev_block, dev_merkle_root, counter);
-        hashes += blocksize*threads;
+        hashes += blocksize*threads*repeats;
         counter++;
         timer = When() - start;
         //printf("%d iterations\n",counter);

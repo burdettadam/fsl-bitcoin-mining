@@ -100,7 +100,7 @@ __global__ void doCalc( unsigned int *seed) {
 
     byte_swap(header.prev_block);
     byte_swap(header.merkle_root);
-
+    // i dont understand how you get the nonce and what num_block is....-----------------------------------------
     header.nonce = (*seed *  blockDim.x * NUM_BLOCKS) + blockIdx.x * blockDim.x + threadIdx.x;
     if(threadIdx.x == 0) printf("nonce: %d\n", header.nonce);
     sha256_init(&sha256_pass1);
@@ -123,8 +123,8 @@ __global__ void doCalc( unsigned int *seed) {
 }
 
 int main() {
-    int blocksize = 4;
-    int threads = 4;
+    int blocksize = 1;
+    int threads = 1;
 
     int hashes = 0;
     int results = 0;
@@ -138,7 +138,7 @@ int main() {
         cudaMemcpy(d_counter, &counter, sizeof(counter), cudaMemcpyHostToDevice);
         doCalc<<< blocksize, threads >>>( d_counter);
         hashes += blocksize*threads;
-        counter++;
+        counter++; 
         timer = When() - start;
         //printf("%d iterations\n",counter);
         cudaDeviceSynchronize();
